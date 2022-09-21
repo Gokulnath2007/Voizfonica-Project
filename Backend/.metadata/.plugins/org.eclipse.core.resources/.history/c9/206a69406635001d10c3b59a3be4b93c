@@ -1,0 +1,13 @@
+package com.springbootjpa.datajpa.dto;
+
+
+public class PlansDTO {
+
+	private Long id;
+	private String category;
+	private double price;
+	private String commonOffers;
+	private String istOffers;
+	private String dataOffers;
+
+}

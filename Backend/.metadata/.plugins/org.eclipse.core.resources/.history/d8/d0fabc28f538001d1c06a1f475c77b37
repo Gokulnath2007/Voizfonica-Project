@@ -1,0 +1,15 @@
+package com.springbootjpa.datajpa.impl;
+
+import javax.persistence.EntityManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class VoizFonicaInfoImpl {
+
+	@Autowired
+	EntityManager entityManager;
+	
+	public getUserAndPlanInfo(Long userId)
+}

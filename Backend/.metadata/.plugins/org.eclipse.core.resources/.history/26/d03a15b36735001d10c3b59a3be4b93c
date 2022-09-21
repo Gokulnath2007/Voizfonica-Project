@@ -1,0 +1,34 @@
+package com.springbootjpa.datajpa.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.springbootjpa.datajpa.common.Constants;
+import com.springbootjpa.datajpa.dto.UserDTO;
+import com.springbootjpa.datajpa.entity.Users;
+import com.springbootjpa.datajpa.repository.PlansRepository;
+import com.springbootjpa.datajpa.repository.UserRepository;
+
+@Service
+public class PlanServiceImpl {
+	
+	@Autowired
+	PlansRepository planRepository;
+	
+	@Override
+	public List<UserDTO> getAllUsers() {
+		List<Users> usersList = userRepository.findByUserType(Constants.UserType.USER);
+		List<UserDTO> userIfoList = new ArrayList<>();
+		usersList.forEach(users ->{
+			UserDTO userInfo = new UserDTO();
+			BeanUtils.copyProperties(users, userInfo, "password");
+			userInfo.setUserId(users.getId());
+			userIfoList.add(userInfo);
+		});
+		return userIfoList;
+	}
+}

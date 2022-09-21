@@ -1,0 +1,13 @@
+package com.springbootjpa.datajpa.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.springbootjpa.datajpa.entity.Users;
+
+public interface UserRepository extends JpaRepository<Users , Integer> {
+
+	Users findByUserName(String userName);
+
+	Users findByUserNameAndPassword(String userName, String password);
+
+}

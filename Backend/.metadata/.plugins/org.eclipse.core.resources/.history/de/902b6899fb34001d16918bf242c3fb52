@@ -1,0 +1,10 @@
+package com.springbootjpa.datajpa.common;
+
+public class Constants {
+
+	public static class ComplaintsStatus {
+		public final String NEW = "New";
+		public final String DONE = "New";
+		public final String IN_PROGRESS = "In-Progress";
+	}
+}

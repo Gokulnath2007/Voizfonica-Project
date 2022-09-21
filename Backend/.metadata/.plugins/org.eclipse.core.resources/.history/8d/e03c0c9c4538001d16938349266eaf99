@@ -1,0 +1,106 @@
+package com.springbootjpa.datajpa.filter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.springbootjpa.datajpa.common.Util;
+import com.springbootjpa.datajpa.entity.UserLoginSession;
+import com.springbootjpa.datajpa.repository.UserLoginSessionRepository;
+
+ 
+/**
+ * Servlet Filter implementation class CORSFilter
+ */
+@Component
+public class CORSFilter implements Filter {
+ 
+	@Value("${service.path}")
+	public String servicePath;
+		
+	@Value("${hostOrginEnable}")
+	public boolean hostOrginEnable;
+
+	@Value("${userlogin.session}")
+	private Long sessionTime;
+	
+	@Autowired
+	UserLoginSessionRepository userLoginSessionRepository;
+	public CORSFilter() {
+    }
+ 
+    /**
+     * @see Filter#destroy()
+     */
+    public void destroy() {
+    }
+ 
+    /**
+     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
+			throws IOException, ServletException {
+    	
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+    	   
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, DELETE");
+		response.addHeader("Access-Control-Allow-Credentials", "true");
+		
+		response.setHeader("Access-Control-Allow-Headers", "Autorization, content-type, xsrf-token, X-Requested-With, user_id");
+		response.setHeader("Access-Control-Expose-Headers", "Autorization");
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+		 
+		if (request.getMethod().equals("OPTIONS")) {
+			response.setStatus(HttpServletResponse.SC_ACCEPTED);
+			throw new ServletException("User ID not avilable in the header");
+		}
+		
+		if (hostOrginEnable) {
+			if (servicePath != null && !servicePath.equals(((HttpServletRequest) servletRequest).getHeader("host"))) {
+				throw new ServletException("User ID not avilable in the header");
+			}
+		}
+		
+		String[] uris = request.getRequestURI().split("/");
+		if(uris[2]!="login") {
+			String userId = request.getHeader("userId");	
+			if(Util.isNullOrBlank(userId)) {
+				throw new ServletException("User ID not avilable in the header");
+			}
+			UserLoginSession userLoginSession = userLoginSessionRepository.findByUserId(Long.valueOf(userId));
+			if(null==userLoginSession) {
+				throw new ServletException("Invalid request");
+			} 
+			
+			long timeDifferenceInSec = ChronoUnit.SECONDS.between(userLoginSession.getLastApiCall(), LocalDateTime.now());
+			if(sessionTime<=timeDifferenceInSec && userLoginSession.getIpAddress().equals(request.getRemoteHost())) {
+				userLoginSession.setLastApiCall(LocalDateTime.now());
+				userLoginSessionRepository.save(userLoginSession);
+				chain.doFilter(request, response);
+			} else {
+				throw new ServletException("Session Expired");
+			}
+		}
+	}
+ 
+    /**
+     * @see Filter#init(FilterConfig)
+     */
+    public void init(FilterConfig fConfig) throws ServletException {
+    	
+    }
+ 
+}

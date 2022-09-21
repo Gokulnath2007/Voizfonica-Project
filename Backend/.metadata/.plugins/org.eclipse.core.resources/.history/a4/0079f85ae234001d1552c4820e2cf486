@@ -1,0 +1,11 @@
+package com.springbootjpa.datajpa.dto;
+
+import java.io.Serializable;
+
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public class ComplaintsDTO implements ResponseEntity, Serializable{
+	
+	
+
+}

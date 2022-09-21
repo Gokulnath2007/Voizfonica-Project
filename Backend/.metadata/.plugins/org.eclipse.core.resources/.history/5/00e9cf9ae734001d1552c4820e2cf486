@@ -1,0 +1,10 @@
+package com.springbootjpa.datajpa.service;
+
+import com.springbootjpa.datajpa.dto.ComplaintsDTO;
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public interface IComplaintService {
+
+	ResponseEntity saveComplaints(ComplaintsDTO complaintsDTO);
+
+}

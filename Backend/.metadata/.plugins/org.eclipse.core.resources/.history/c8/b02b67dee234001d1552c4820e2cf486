@@ -1,0 +1,5 @@
+package com.springbootjpa.datajpa.repository;
+
+public interface ComplaintsRepository {
+
+}

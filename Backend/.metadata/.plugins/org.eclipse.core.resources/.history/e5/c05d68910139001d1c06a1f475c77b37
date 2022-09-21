@@ -1,0 +1,170 @@
+package com.springbootjpa.datajpa.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.springbootjpa.datajpa.common.Constants;
+import com.springbootjpa.datajpa.common.ErrorCode;
+import com.springbootjpa.datajpa.common.ErrorMessages;
+import com.springbootjpa.datajpa.common.Util;
+import com.springbootjpa.datajpa.dto.UserDTO;
+import com.springbootjpa.datajpa.dto.common.CommonString;
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+import com.springbootjpa.datajpa.entity.UserAndPlanInfo;
+import com.springbootjpa.datajpa.entity.UserLoginSession;
+import com.springbootjpa.datajpa.entity.Users;
+import com.springbootjpa.datajpa.impl.VoizFonicaInfoImpl;
+import com.springbootjpa.datajpa.repository.UserLoginSessionRepository;
+import com.springbootjpa.datajpa.repository.UserRepository;
+
+@Service
+public class LoginServiceImpl implements ILoginService {
+
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	HttpServletRequest httpRequest;
+	
+	@Autowired
+	UserLoginSessionRepository userLoginSessionRepository;
+	
+	@Autowired
+	VoizFonicaInfoImpl voizFonicaInfoImpl;
+	
+	@Override
+	public ResponseEntity registerUser(UserDTO userInfo) {
+		ResponseEntity response = null;
+		try {
+			if (userRepository.existsByMobileNo(userInfo.getMobileNo())) {
+				response = new CommonString(ErrorCode.COMMON_FAILURE, ErrorMessages.MOBILE_NO_ALREADY_EXIST);
+			} else if (userRepository.existsByUserNameIgnoreCase(userInfo.getUserName())) {
+				response = new CommonString(ErrorCode.COMMON_FAILURE,
+						ErrorMessages.USER_ALREADY_EXIST + " " + ErrorMessages.TRY_ANOTHER_USERNAME);
+			} else {
+				Users user = new Users();
+				BeanUtils.copyProperties(userInfo, user, "id");
+				user.setUserType(Constants.UserType.USER);
+				userRepository.save(user);
+				response = new CommonString(ErrorCode.COMMON_SUCCESS, ErrorMessages.REGISTRATION_SUCCESS);
+			}
+
+		} catch (Exception e) {
+			response = new CommonString(ErrorCode.SERVER_ERROR, ErrorMessages.SERVER_ERROR);
+		}
+		return response;
+	}
+
+	@Override
+	public ResponseEntity authenticateUser(UserDTO loginInfo) {
+		ResponseEntity response = null;
+		try {
+			/* loginInfo.setPassword(Util.getHashCode512(loginInfo.getPassword())); */
+			Users user = userRepository.findByUserNameIgnoreCaseAndPassword(loginInfo.getUserName(),
+					loginInfo.getPassword());
+			if (null == user) {
+				response = new CommonString(ErrorCode.COMMON_FAILURE, ErrorMessages.INVALID_USERNAME_OR_PASSWORD);
+			} else {
+				UserLoginSession userLoginSession = userLoginSessionRepository.findByUserId(user.getId());
+				if(null==userLoginSession) {
+					userLoginSession = new UserLoginSession();
+					userLoginSession.setUserId(user.getId());
+				}
+				
+				userLoginSession.setIpAddress(httpRequest.getRemoteHost());
+				userLoginSession.setSessionId(UUID.randomUUID().toString());
+				userLoginSession.setLoginTimeStamp(LocalDateTime.now());
+				userLoginSession.setLastApiCall(LocalDateTime.now());
+				userLoginSessionRepository.save(userLoginSession);
+				
+				loginInfo.setUserId(user.getId());
+				loginInfo.setUserType(user.getUserType());
+				loginInfo.setUserName(null);
+				loginInfo.setPassword(null);
+				loginInfo.setId(ErrorCode.COMMON_SUCCESS);
+				return loginInfo;
+			}
+		} catch (Exception e) {
+			response = new CommonString(ErrorCode.SERVER_ERROR, ErrorMessages.SERVER_ERROR);
+		}
+		return response;
+	}
+
+	@Override
+	public ResponseEntity updateUserProfile(UserDTO userInfo) {
+		ResponseEntity response = null;
+		try {
+			if (null == userInfo.getUserId()) {
+				System.out.println("User ID is not available in the request");
+				return new CommonString(0L, ErrorMessages.PLZ_CONTACT_CUSTOMER_SERVICE);
+			}
+
+			Optional<Users> userOpt = userRepository.findById(userInfo.getUserId());
+			if (!userOpt.isPresent()) {
+				System.out.println("Given User ID is not valid");
+				return new CommonString(ErrorCode.COMMON_FAILURE, ErrorMessages.PLZ_CONTACT_CUSTOMER_SERVICE);
+			} else {
+				Users exUser = userRepository.findByUserNameIgnoreCase(userInfo.getUserName());
+				if (null != exUser && !exUser.getId().equals(userInfo.getUserId())) {
+					response = new CommonString(ErrorCode.COMMON_FAILURE,
+							ErrorMessages.USER_ALREADY_EXIST + " " + ErrorMessages.TRY_ANOTHER_USERNAME);
+				} else {
+					Users user = new Users();
+					BeanUtils.copyProperties(userInfo, user, "id");
+					user.setUserType(userOpt.get().getUserType());
+					user.setId(userInfo.getUserId());
+					userRepository.save(user);
+					response = new CommonString(ErrorCode.COMMON_SUCCESS, ErrorMessages.PROFILE_UPDATE);
+				}
+			}
+		} catch (Exception e) {
+			response = new CommonString(ErrorCode.SERVER_ERROR, ErrorMessages.SERVER_ERROR);
+		}
+		return response;
+	}
+
+	@Override
+	public List<UserDTO> getAllUsers() {
+		List<Users> usersList = userRepository.findByUserType(Constants.UserType.USER);
+		List<UserDTO> userIfoList = new ArrayList<>();
+		usersList.forEach(users -> {
+			UserDTO userInfo = new UserDTO();
+			BeanUtils.copyProperties(users, userInfo, "password");
+			userInfo.setUserId(users.getId());
+			userIfoList.add(userInfo);
+		});
+		return userIfoList;
+	}
+
+	@Override
+	public String deleteUserById(Long id) {
+		userRepository.deleteById(id);
+		return "Deleted SuccessFully";
+	}
+
+	@Override
+	public ResponseEntity getUserDetailsByUserId(Long userId) {
+		UserAndPlanInfo userPlans = voizFonicaInfoImpl.getUserAndPlanInfo(id);
+		if (userOpt.isPresent()) {
+			UserDTO userInfo = new UserDTO();
+			BeanUtils.copyProperties(userOpt.get(), userInfo, "id", "password");
+			userInfo.setUserId(userOpt.get().getId());
+			userInfo.setId(ErrorCode.COMMON_SUCCESS);
+			return userInfo;
+		} else {
+			return new CommonString(ErrorCode.COMMON_FAILURE, "User ID is unavailable");
+		}
+
+	}
+
+}

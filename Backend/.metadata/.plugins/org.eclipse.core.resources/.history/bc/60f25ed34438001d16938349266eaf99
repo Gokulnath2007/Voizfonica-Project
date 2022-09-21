@@ -1,0 +1,75 @@
+package com.springbootjpa.datajpa.filter;
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+ 
+/**
+ * Servlet Filter implementation class CORSFilter
+ */
+@Component
+public class CORSFilter implements Filter {
+ 
+	@Value("${service.path}")
+	public String servicePath;
+		
+	@Value("${hostOrginEnable}")
+	public boolean hostOrginEnable;
+
+	public CORSFilter() {
+    }
+ 
+    /**
+     * @see Filter#destroy()
+     */
+    public void destroy() {
+    }
+ 
+    /**
+     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
+			throws IOException, ServletException {
+    	
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+    	   
+		response.addHeader("Access-Control-Allow-Methods", "POST, GET, DELETE");
+		response.addHeader("Access-Control-Allow-Credentials", "true");
+		
+		response.setHeader("Access-Control-Allow-Headers", "Autorization, content-type, xsrf-token, X-Requested-With, user_id");
+		response.setHeader("Access-Control-Expose-Headers", "Autorization");
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
+		 
+		if (request.getMethod().equals("OPTIONS")) {
+			response.setStatus(HttpServletResponse.SC_ACCEPTED);
+			return;
+		}
+		
+		if (hostOrginEnable) {
+			if (servicePath != null && !servicePath.equals(((HttpServletRequest) servletRequest).getHeader("host"))) {
+				return;
+			}
+		}
+			
+		chain.doFilter(request, response);
+	}
+ 
+    /**
+     * @see Filter#init(FilterConfig)
+     */
+    public void init(FilterConfig fConfig) throws ServletException {
+    	
+    }
+ 
+}

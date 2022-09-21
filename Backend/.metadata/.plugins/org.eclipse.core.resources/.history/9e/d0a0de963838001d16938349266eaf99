@@ -1,0 +1,5 @@
+package com.springbootjpa.datajpa;
+
+public class SessionInterceptor {
+
+}

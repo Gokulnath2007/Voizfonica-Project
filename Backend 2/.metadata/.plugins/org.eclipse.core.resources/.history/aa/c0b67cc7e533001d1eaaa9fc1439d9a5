@@ -1,0 +1,75 @@
+package com.springbootjpa.datajpa.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.springbootjpa.datajpa.entity.Users;
+import com.springbootjpa.datajpa.repository.UserRepository;
+import com.springbootjpa.datajpa.service.UserService;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+public class UserController {
+	
+	@Autowired
+	private UserService service;
+	@Autowired
+	private UserRepository repo;
+	@PostMapping("/login")
+	public Users loginUser(@RequestBody Users users) throws Exception {
+        String tempuserName = users.getUserName();
+        String temppassword = users.getPassword();
+        Users userObj=null;
+        
+        if(tempuserName!=null && temppassword!=null)
+        {
+            userObj=service.findByUsernameAndPassword(tempuserName, temppassword);
+        }
+        if(userObj == null) {
+            throw new Exception("Wrong credentials");
+        }
+        return userObj;
+    }
+	
+	   @PostMapping("/addusers")
+	    public Users registerUser(@RequestBody Users users) throws Exception {
+	        String tempuserName=users.getUserName();
+	        if(tempuserName!=null && !"".equals(tempuserName)) {
+	            Users userObj =service.findByUsername(tempuserName);
+	            if(userObj !=null) {
+	                throw new Exception("User with "+tempuserName+" already exists");
+	            }
+	        }
+	        
+	    Users userObj=null;
+	    userObj=service.saveUser(users);
+	    return userObj;
+	    }
+	   
+	   @PostMapping("/updateusers")
+	    public Users updateUser(@RequestBody Users users) throws Exception {
+	        String tempuserName=users.getUserName();
+	        if(tempuserName!=null && !"".equals(tempuserName)) {
+	            Users userObj =service.findByUsername(tempuserName);
+	            if(userObj !=null) {
+	            	userObj=null;
+	        	    userObj=service.saveUser(users);
+	        	    return userObj;
+	            }
+	        }
+	        throw new Exception("User with "+tempuserName+" not exists");
+	    
+	    }
+	    @GetMapping("/getusers")
+	    @CrossOrigin(origins="http://localhost:4200")
+	    public List<Users> getAllUsers(){
+	    
+	        return repo.findAll();
+	    }
+}

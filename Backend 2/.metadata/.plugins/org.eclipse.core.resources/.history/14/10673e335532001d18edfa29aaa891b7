@@ -1,0 +1,14 @@
+package com.springbootjpa.datajpa.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.springbootjpa.datajpa.entity.Admin;
+import com.springbootjpa.datajpa.entity.Users;
+
+public interface AdminRepository extends JpaRepository<Admin , Integer> {
+
+	Users findByUserName(String userName);
+
+	Users findByUserNameAndPassword(String userName, String password);
+
+}

@@ -1,0 +1,14 @@
+package com.springbootjpa.datajpa.service;
+
+import com.springbootjpa.datajpa.dto.UsersDTO;
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public interface IUserService {
+	
+	
+	ResponseEntity registerUser(UsersDTO userInfo);
+	ResponseEntity authenticateUser(UsersDTO loginInfo);
+	ResponseEntity updateUserProfile(UsersDTO userInfo);
+
+    
+}

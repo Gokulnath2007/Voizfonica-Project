@@ -1,0 +1,73 @@
+package com.springbootjpa.datajpa.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.springbootjpa.datajpa.common.Constants;
+import com.springbootjpa.datajpa.dto.PlansDTO;
+import com.springbootjpa.datajpa.entity.Plans;
+import com.springbootjpa.datajpa.repository.PlansRepository;
+
+@Service
+public class PlanServiceImpl implements IPlanService {
+	
+	@Autowired
+	PlansRepository plansRepository;
+	
+	@Override
+	public List<PlansDTO> getAllPrepaidPlans() {
+	
+		List<Plans> plansList = plansRepository.findByCategoryId(Constants.CategoryId.PREPAID);
+		List<PlansDTO> plansDTO = new ArrayList<>();
+		plansList.forEach(plans ->{
+			PlansDTO plansInfo = new PlansDTO();
+			BeanUtils.copyProperties(plans, plansInfo);
+			plansInfo.setPlanId(plans.getPlanId());
+			plansDTO.add(plansInfo);
+		});
+		return plansDTO;
+	}
+
+	@Override
+	public List<PlansDTO> getAllPlans() {
+		List<Plans> plansList = plansRepository.findAll();
+		List<PlansDTO> plansDTO = new ArrayList<>();
+		plansList.forEach(plans ->{
+			PlansDTO plansInfo = new PlansDTO();
+			BeanUtils.copyProperties(plans, plansInfo);
+			plansInfo.setPlanId(plans.getPlanId());
+			plansDTO.add(plansInfo);
+		});
+		return plansDTO;
+	}
+
+	@Override
+	public List<PlansDTO> getAllPostpaidPlans() {
+		List<Plans> plansList = plansRepository.findByCategoryId(Constants.CategoryId.POSTPAID);
+		List<PlansDTO> plansDTO = new ArrayList<>();
+		plansList.forEach(plans ->{
+			PlansDTO plansInfo = new PlansDTO();
+			BeanUtils.copyProperties(plans, plansInfo);
+			plansInfo.setPlanId(plans.getPlanId());
+			plansDTO.add(plansInfo);
+		});
+		return plansDTO;
+	}
+
+	@Override
+	public List<PlansDTO> getAllDonglePlans() {
+		List<Plans> plansList = plansRepository.findByCategoryId(Constants.CategoryId.DONGLE);
+		List<PlansDTO> plansDTO = new ArrayList<>();
+		plansList.forEach(plans ->{
+			PlansDTO plansInfo = new PlansDTO();
+			BeanUtils.copyProperties(plans, plansInfo);
+			plansInfo.setPlanId(plans.getPlanId());
+			plansDTO.add(plansInfo);
+		});
+		return plansDTO;
+	}
+}

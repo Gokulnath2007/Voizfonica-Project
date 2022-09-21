@@ -1,0 +1,23 @@
+package com.springbootjpa.datajpa.repository;
+
+import java.util.List;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.springbootjpa.datajpa.entity.Users;
+
+public interface UserRepository extends JpaRepository<Users , Long> {
+
+	boolean existsByUserNameIgnoreCase(String userName);
+
+	Users findByUserNameIgnoreCaseAndPassword(String userName, String password);
+
+	Users findByUserNameIgnoreCase(String userName);
+
+	List<Users> findByUserType(String userType);
+
+	boolean existsByMobileNo(String mobileNo);
+
+	
+}

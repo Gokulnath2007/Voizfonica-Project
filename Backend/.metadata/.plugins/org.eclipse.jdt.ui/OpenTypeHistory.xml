@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+    <typeInfo handle="=datajpa/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.springbootjpa.datajpa.service{ILoginService.java[ILoginService" modifiers="513" timestamp="1663255111626"/>
+    <typeInfo handle="=datajpa/C:\/Users\/gokulnath.r\/.m2\/repository\/org\/springframework\/data\/spring-data-jpa\/2.7.2\/spring-data-jpa-2.7.2.jar=/maven.pomderived=/true=/=/org.eclipse.jst.component.dependency=/\/WEB-INF\/lib=/=/maven.pomderived=/true=/=/org.eclipse.jst.component.archivename=/spring-data-jpa-2.7.2.jar=/=/maven.groupId=/org.springframework.data=/=/maven.artifactId=/spring-data-jpa=/=/maven.version=/2.7.2=/=/maven.scope=/compile=/&lt;org.springframework.data.jpa.repository(JpaRepository.class[JpaRepository" modifiers="1537" timestamp="1660817667311"/>
+</typeInfoHistroy>

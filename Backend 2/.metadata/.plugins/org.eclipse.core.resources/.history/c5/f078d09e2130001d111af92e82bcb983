@@ -1,0 +1,12 @@
+package com.springbootjpa.datajpa.service;
+
+import com.springbootjpa.datajpa.entity.Complaint;
+import com.springbootjpa.datajpa.entity.Users;
+
+public class ComplaintService {
+
+	public Users saveUser(Complaint complaint) {
+		return null;
+	}
+
+}

@@ -1,0 +1,26 @@
+package com.springbootjpa.datajpa.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.springbootjpa.datajpa.entity.Users;
+import com.springbootjpa.datajpa.repository.UserRepository;
+
+@Service
+public class UserService {
+	
+	@Autowired
+    private UserRepository repo;
+	public Users saveUser(Users users) {
+        return repo.save(users);
+    }
+    
+    public Users findByUsername(String userName) {
+        return repo.findByUserName(userName);
+        
+    }
+    public Users findByUsernameAndPassword(String userName,String password) {
+        return repo.findByUserNameAndPassword(userName,password);
+        
+    }
+}

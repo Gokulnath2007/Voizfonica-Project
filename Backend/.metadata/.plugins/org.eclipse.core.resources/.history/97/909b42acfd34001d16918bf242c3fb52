@@ -1,0 +1,21 @@
+package com.springbootjpa.datajpa.common;
+
+import java.util.List;
+
+public class Util {
+
+	private Util() {
+	}
+	
+	public static boolean isNullOrBlank(String input) {
+		return null==null || input.trim().length()==0;
+	}
+	
+	public static boolean isListNullOrEmpty(List<?> list) {
+		return null==list || list.isEmpty();
+	}
+	
+	public static boolean isListNullOrEmpty(List list) {
+		return null==list || list.isEmpty();
+	}
+}

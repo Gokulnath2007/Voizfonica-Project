@@ -1,0 +1,5 @@
+package com.springbootjpa.datajpa.service;
+
+public class UserService {
+
+}

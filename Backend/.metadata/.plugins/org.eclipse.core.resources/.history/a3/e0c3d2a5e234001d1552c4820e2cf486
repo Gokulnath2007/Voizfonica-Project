@@ -1,0 +1,18 @@
+package com.springbootjpa.datajpa.dto;
+
+import java.io.Serializable;
+
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public class ComplaintsDTO implements ResponseEntity, Serializable{
+	
+	private static final long serialVersionUID = 3182889116010444832L;
+	private int id;
+	private String fullName;
+	private String mobileNo;
+	private String subject;
+	private String emailId;
+	private String message;
+	
+
+}

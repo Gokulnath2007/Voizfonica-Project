@@ -1,0 +1,9 @@
+1662363864872	Delete element
+1662386605807	Move compilation unit
+1662389542106	Delete element
+1662389588395	Rename type 'LoginRepository'
+1662394262400	Rename local variable 'isUseerExist'
+1662395264499	Delete element
+1662396570018	Rename type 'Controller'
+1662396922645	Move compilation unit
+1662400756420	Rename method 'existsByUserName'

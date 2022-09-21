@@ -1,0 +1,6 @@
+package com.springbootjpa.datajpa.common;
+
+public class Constants {
+
+	public final String COMPLIAN
+}

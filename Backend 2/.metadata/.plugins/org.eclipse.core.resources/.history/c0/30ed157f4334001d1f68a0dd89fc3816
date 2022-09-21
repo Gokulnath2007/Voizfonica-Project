@@ -1,0 +1,5 @@
+package com.springbootjpa.datajpa.dto.common;
+
+public class ResponseEntity {
+
+}

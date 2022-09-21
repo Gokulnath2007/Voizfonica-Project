@@ -1,0 +1,18 @@
+package com.springbootjpa.datajpa.dto;
+
+import java.io.Serializable;
+
+public class UsersDTO implements Serializable{
+
+	private static final long serialVersionUID = 3182889116010444832L;
+
+	private int id;;
+	private int userId;
+	private String userName;
+	private String password;
+	private String emailId;
+	private String mobileNo;
+	private String firstName;
+	private String lastName;
+	private int pinCode;
+}

@@ -1,0 +1,7 @@
+package com.springbootjpa.datajpa.dto;
+
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public class ComplaintsDTO implements ResponseEntity {
+
+}

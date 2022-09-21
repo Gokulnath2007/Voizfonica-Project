@@ -1,0 +1,28 @@
+package com.springbootjpa.datajpa.entity;
+
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.Entity;
+import javax.persistence.SqlResultSetMapping;
+
+@Entity
+@SqlResultSetMapping(name = "userAndPlanInfo", classes = @ConstructorResult(targetClass = UserAndPlanInfo.class, columns = {
+		@ColumnResult(name="userId",type=Long.class),
+		@ColumnResult(name="firstName",type=String.class),
+		@ColumnResult(name="lastName",type=String.class),
+		@ColumnResult(name="emailId",type=String.class),
+		@ColumnResult(name="mobileNo",type=String.class),
+		@ColumnResult(name="categoryName",type=String.class),
+		@ColumnResult(name="price",type=Double.class)
+}))
+public class UserAndPlanInfo {
+	private Long userId;
+	private String firstName;
+	private String lastName;
+	private String emailId;
+	private String mobileNo;
+	private String categoryName;
+	private Double price;
+	
+	
+}

@@ -1,0 +1,34 @@
+package com.springbootjpa.datajpa.entity;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user_login_session")
+public class UserLoginSession {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	@Column(name = "user_id")
+	private Long userId;
+	
+	@Column(name = "session_id")
+	private String sessionId;
+	
+	@Column(name = "ip_address")
+	private String ipAddress;
+	
+	@Column(name = "login_time_stamp")
+	private LocalDateTime loginTimeStamp;
+	
+	@Column(name = "last_api_call")
+	private LocalDateTime lastApiCall;
+}

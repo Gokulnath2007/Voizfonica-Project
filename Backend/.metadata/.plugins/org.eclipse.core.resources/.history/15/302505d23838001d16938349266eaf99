@@ -1,0 +1,22 @@
+package com.springbootjpa.datajpa;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+
+
+public class SessionInterceptor implements HandlerInterceptor {
+	
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		 
+		return false;
+	}
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,ModelAndView modelAndView) {
+		 
+		
+	}
+
+}

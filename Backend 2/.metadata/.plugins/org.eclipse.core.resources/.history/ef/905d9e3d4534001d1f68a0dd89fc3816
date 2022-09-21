@@ -1,0 +1,51 @@
+package com.springbootjpa.datajpa.service;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.springbootjpa.datajpa.dto.UsersDTO;
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+import com.springbootjpa.datajpa.entity.Users;
+import com.springbootjpa.datajpa.repository.UserRepository;
+
+@Service
+public class UserServiceImpl implements IUserService {
+
+	@Autowired
+	UserRepository repo;
+
+	@Override
+	public ResponseEntity registerUser(UsersDTO userInfo) {
+		ResponseEntity response = null;
+		try {
+			boolean isUserExist = repo.existsByUserNameIgnoreCase(userInfo.getUserName());
+			if (isUserExist) {
+				throw new Exception("User already Exist");
+			} else {
+				Users user = new Users();
+				BeanUtils.copyProperties(userInfo, user, "id");
+				repo.save(user);
+				return userInfo;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("Server Error");
+		}
+		return userInfo;
+	}
+	}
+
+	@Override
+	public ResponseEntity authenticateUser(UsersDTO loginInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity updateUserProfile(UsersDTO userInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}

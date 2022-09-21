@@ -1,0 +1,19 @@
+package com.springbootjpa.datajpa.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.springbootjpa.datajpa.dto.ComplaintsDTO;
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+import com.springbootjpa.datajpa.repository.ComplaintsRepository;
+
+public class ComplaintServiceImpl implements IComplaintService {
+
+	@Autowired
+	ComplaintsRepository complaintsRepository;
+	
+	@Override
+	public ResponseEntity saveComplaints(ComplaintsDTO complaintsDTO) {
+		return complaintsRepository.saveAll(complaintsDTO);
+	}
+
+}

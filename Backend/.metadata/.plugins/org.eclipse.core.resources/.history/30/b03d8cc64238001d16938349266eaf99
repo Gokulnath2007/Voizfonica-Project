@@ -1,0 +1,51 @@
+package com.springbootjpa.datajpa;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.springbootjpa.datajpa.common.Util;
+import com.springbootjpa.datajpa.entity.UserLoginSession;
+import com.springbootjpa.datajpa.repository.UserLoginSessionRepository;
+
+@Component
+public class SessionInterceptor implements HandlerInterceptor {
+	
+	@Value("${userlogin.session}")
+	private Long sessionTime;
+	
+	@Autowired
+	UserLoginSessionRepository userLoginSessionRepository;
+	
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		String[] uris = request.getRequestURI().split("/");
+		if(uris[2]!="login") {
+			String userId = request.getHeader("userId");	
+			if(Util.isNullOrBlank(userId)) {
+				throw new Exception("User ID not avilable in the header");
+			}
+			UserLoginSession userLoginSession = userLoginSessionRepository.findByUserId(Long.valueOf(userId));
+			if(null==userLoginSession) {
+				throw new Exception("Invalid request");
+			} 
+			
+			long timeDifferenceInSec = ChronoUnit.SECONDS.between(userLoginSession.getLastApiCall(), LocalDateTime.now());
+			if(sessionTime<=timeDifferenceInSec && userLoginSession.getIpAddress().equals(request.getRemoteHost())) {
+				userLoginSession.setLastApiCall(LocalDateTime.now());
+				userLoginSessionRepository.save(userLoginSession);
+				return true;
+			} else {
+				throw new Exception("Session Expired");
+			}
+		}
+		return true;
+	}
+}

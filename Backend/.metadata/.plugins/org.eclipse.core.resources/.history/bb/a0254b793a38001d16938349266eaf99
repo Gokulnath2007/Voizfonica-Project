@@ -1,0 +1,45 @@
+package com.springbootjpa.datajpa;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.springbootjpa.datajpa.common.Util;
+
+@Component
+public class SessionInterceptor implements HandlerInterceptor {
+	
+	@Autowired
+	UserLoginSessionRepository userLoginSessionRepository;
+	
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		String[] uris = request.getRequestURI().split("/");
+		if(uris[2]!="login") {
+			String userId = request.getHeader("userId");	
+			if(Util.isNullOrBlank(userId)) {
+				throw new Exception("User ID not avilable in the header");
+				return false;
+			}
+			
+			userLoginSessionRepository.findByUserId(request.getHeader("userId")){
+				
+			}
+		}
+		return true;
+	}
+
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) {
+
+	}
+
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+			Exception exception) {
+
+	}
+
+}

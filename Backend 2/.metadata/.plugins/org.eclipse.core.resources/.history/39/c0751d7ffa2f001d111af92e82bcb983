@@ -1,0 +1,5 @@
+package com.springbootjpa.datajpa.entity;
+
+public class Users {
+
+}

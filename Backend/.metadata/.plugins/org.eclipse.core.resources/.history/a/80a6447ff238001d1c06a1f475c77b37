@@ -1,0 +1,8 @@
+package com.springbootjpa.datajpa.impl;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class VoizFonicaInfoImpl {
+
+}

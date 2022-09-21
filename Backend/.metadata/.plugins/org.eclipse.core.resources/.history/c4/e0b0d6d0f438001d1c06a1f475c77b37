@@ -1,0 +1,13 @@
+package com.springbootjpa.datajpa.entity;
+
+import javax.persistence.ConstructorResult;
+import javax.persistence.Entity;
+import javax.persistence.SqlResultSetMapping;
+
+@Entity
+@SqlResultSetMapping(name = "userAndPlanInfo", classes = @ConstructorResult(targetClass = UserAndPlanInfo.class, columns = {
+
+}))
+public class UserAndPlanInfo {
+
+}

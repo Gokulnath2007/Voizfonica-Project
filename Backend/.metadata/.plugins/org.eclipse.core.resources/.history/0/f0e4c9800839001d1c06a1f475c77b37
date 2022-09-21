@@ -1,0 +1,9 @@
+package com.springbootjpa.datajpa.common;
+
+public enum CategoryEnum {
+	
+	
+	PREPAID(1001L,"Prepaid"),
+	POSTPAID(1002L,"Postpaid"),
+	DONGLE(1003L,"Dongle");
+}

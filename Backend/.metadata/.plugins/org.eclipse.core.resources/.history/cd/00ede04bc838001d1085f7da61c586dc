@@ -1,0 +1,68 @@
+package com.springbootjpa.datajpa.dto;
+
+import java.io.Serializable;
+
+import com.springbootjpa.datajpa.dto.common.ResponseEntity;
+
+public class PlansDTO  implements ResponseEntity, Serializable{
+
+	private static final long serialVersionUID = 3182889116010444832L;
+	private Long planId;
+	private String validity;
+	private String category;
+	private double price;
+	private String smsOffers;
+	private String commonOffers;
+	private String istOffers;
+	private String dataOffers;
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public String getCommonOffers() {
+		return commonOffers;
+	}
+	public void setCommonOffers(String commonOffers) {
+		this.commonOffers = commonOffers;
+	}
+	public String getIstOffers() {
+		return istOffers;
+	}
+	public void setIstOffers(String istOffers) {
+		this.istOffers = istOffers;
+	}
+	public String getDataOffers() {
+		return dataOffers;
+	}
+	public void setDataOffers(String dataOffers) {
+		this.dataOffers = dataOffers;
+	}
+	public String getSmsOffers() {
+		return smsOffers;
+	}
+	public void setSmsOffers(String smsOffers) {
+		this.smsOffers = smsOffers;
+	}
+	public String getValidity() {
+		return validity;
+	}
+	public void setValidity(String validity) {
+		this.validity = validity;
+	}
+	
+
+}

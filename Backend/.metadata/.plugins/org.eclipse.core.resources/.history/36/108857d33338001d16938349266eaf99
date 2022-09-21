@@ -1,0 +1,13 @@
+package com.springbootjpa.datajpa.common;
+
+public class ErrorMessages {
+
+	public static final String USER_ALREADY_EXIST = "User is already exist in our system.";
+	public static final String TRY_ANOTHER_USERNAME = "Please try with another username.";
+	public static final String SERVER_ERROR = "Something went wrong in the API call.";
+	public static final String INVALID_USERNAME_OR_PASSWORD = "Incorrect Username / Password.";
+	public static final String REGISTRATION_SUCCESS = "You have been successfully registered.";
+	public static final String PLZ_CONTACT_CUSTOMER_SERVICE = "Please contact Customer Sevice at 1800-1234-567.";
+	public static final String PROFILE_UPDATE = "Profile details updated successfully.";
+	public static final String MOBILE_NO_ALREADY_EXIST = null;
+}
